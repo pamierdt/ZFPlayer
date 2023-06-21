@@ -221,11 +221,15 @@
     self.player.lockedScreen = NO;
     self.lockBtn.selected = NO;
     if (self.player.orientationObserver.supportInterfaceOrientation & ZFInterfaceOrientationMaskPortrait) {
-        [self.player enterFullScreen:NO animated:YES];
+        @zf_weakify(self)
+        [self.player enterFullScreen:NO animated:YES completion:^{
+            @zf_strongify(self)
+            if (self.backBtnClickCallback) {
+                self.backBtnClickCallback();
+            }
+        }];
     }
-    if (self.backBtnClickCallback) {
-        self.backBtnClickCallback();
-    }
+    
 }
 - (void)downLoadClickAction:(UIButton *)sender {
     if (self.downloadBtnClickCallback) {
