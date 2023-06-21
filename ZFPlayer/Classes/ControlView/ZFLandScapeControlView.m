@@ -143,7 +143,7 @@
     self.titleLabel.frame = CGRectMake(min_x, min_y, min_w, min_h);
     self.titleLabel.zf_centerY = self.backBtn.zf_centerY;
     
-    self.downloadBtn.frame = CGRectMake(ScreenWidth - 80, min_y, 40, 40);
+    self.downloadBtn.frame = CGRectMake(min_view_w - 80, min_y, 40, 40);
     self.downloadBtn.zf_centerY = self.backBtn.zf_centerY;
     
     min_h = iPhoneX ? 100 : 73;
