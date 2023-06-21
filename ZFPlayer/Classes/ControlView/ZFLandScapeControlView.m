@@ -45,7 +45,9 @@
 @property (nonatomic, strong) UIView *bottomToolView;
 /// 播放或暂停按钮
 @property (nonatomic, strong) UIButton *playOrPauseBtn;
-/// 播放的当前时间 
+/// 下载按钮
+@property (nonatomic, strong) UIButton *downloadBtn;
+/// 播放的当前时间
 @property (nonatomic, strong) UILabel *currentTimeLabel;
 /// 滑杆
 @property (nonatomic, strong) ZFSliderView *slider;
@@ -63,12 +65,21 @@
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarFrameNotification object:nil];
 }
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.showDownload = YES;
+    }
+    return self;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.topToolView];
         [self.topToolView addSubview:self.statusBarView];
         [self.topToolView addSubview:self.backBtn];
+        [self.topToolView addSubview:self.downloadBtn];
         [self.topToolView addSubview:self.titleLabel];
         [self addSubview:self.bottomToolView];
         [self.bottomToolView addSubview:self.playOrPauseBtn];
@@ -132,6 +143,9 @@
     self.titleLabel.frame = CGRectMake(min_x, min_y, min_w, min_h);
     self.titleLabel.zf_centerY = self.backBtn.zf_centerY;
     
+    self.downloadBtn.frame = CGRectMake(ScreenWidth - 80, min_y, 40, 40);
+    self.downloadBtn.zf_centerY = self.backBtn.zf_centerY;
+    
     min_h = iPhoneX ? 100 : 73;
     min_x = 0;
     min_y = min_view_h - min_h;
@@ -190,6 +204,7 @@
 
 - (void)makeSubViewsAction {
     [self.backBtn addTarget:self action:@selector(backBtnClickAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.downloadBtn addTarget:self action:@selector(downLoadClickAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.playOrPauseBtn addTarget:self action:@selector(playPauseButtonClickAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.lockBtn addTarget:self action:@selector(lockButtonClickAction:) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -206,15 +221,16 @@
     self.player.lockedScreen = NO;
     self.lockBtn.selected = NO;
     if (self.player.orientationObserver.supportInterfaceOrientation & ZFInterfaceOrientationMaskPortrait) {
-        @zf_weakify(self)
-        [self.player enterFullScreen:NO animated:YES completion:^{
-            @zf_strongify(self)
-            if (self.backBtnClickCallback) {
-                self.backBtnClickCallback();
-            }
-        }];
+        [self.player enterFullScreen:NO animated:YES];
     }
-    
+    if (self.backBtnClickCallback) {
+        self.backBtnClickCallback();
+    }
+}
+- (void)downLoadClickAction:(UIButton *)sender {
+    if (self.downloadBtnClickCallback) {
+        self.downloadBtnClickCallback();
+    }
 }
 
 - (void)playPauseButtonClickAction:(UIButton *)sender {
@@ -406,6 +422,11 @@
     self.statusBarView.hidden = !showCustomStatusBar;
 }
 
+- (void)setShowDownload:(BOOL)showDownload {
+    _showDownload = showDownload;
+    self.downloadBtn.hidden = !showDownload;
+}
+
 #pragma mark - getter
 
 - (ZFPlayerStatusBar *)statusBarView {
@@ -440,6 +461,15 @@
         _titleLabel.font = [UIFont systemFontOfSize:15.0];
     }
     return _titleLabel;
+}
+
+- (UIButton *)downloadBtn {
+    if (!_downloadBtn) {
+        _downloadBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_downloadBtn setImage:ZFPlayer_Image(@"video_download_icon") forState:UIControlStateNormal];
+        
+    }
+    return _downloadBtn;
 }
 
 - (UIView *)bottomToolView {

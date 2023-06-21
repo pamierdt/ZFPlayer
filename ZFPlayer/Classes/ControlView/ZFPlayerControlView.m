@@ -653,6 +653,11 @@
     self.landScapeControlView.showCustomStatusBar = showCustomStatusBar;
 }
 
+- (void)setShowDownload:(BOOL)showDownload {
+    _showDownload = showDownload;
+    self.landScapeControlView.showDownload = showDownload;
+}
+
 #pragma mark - getter
 
 - (UIImageView *)bgImgView {
@@ -830,6 +835,11 @@
 - (void)setBackBtnClickCallback:(void (^)(void))backBtnClickCallback {
     _backBtnClickCallback = [backBtnClickCallback copy];
     self.landScapeControlView.backBtnClickCallback = _backBtnClickCallback;
+}
+
+-(void)setDownloadBtnClickCallback:(void (^)(void))downloadBtnClickCallback{
+    _downloadBtnClickCallback = [downloadBtnClickCallback copy];
+    self.landScapeControlView.downloadBtnClickCallback = _downloadBtnClickCallback;
 }
 
 @end

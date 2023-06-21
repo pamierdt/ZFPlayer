@@ -85,6 +85,8 @@
 
 /// 返回按钮点击回调
 @property (nonatomic, copy) void(^backBtnClickCallback)(void);
+/// 下载按钮block
+@property (nonatomic, copy) void(^downloadBtnClickCallback)(void);
 
 /// 控制层显示或者隐藏
 @property (nonatomic, readonly) BOOL controlViewAppeared;
@@ -112,6 +114,9 @@
 
 /// 横屏时候是否显示自定义状态栏(iOS13+)，默认 NO.
 @property (nonatomic, assign) BOOL showCustomStatusBar;
+
+/// 横屏时候是否显示下载按钮，默认 YES.
+@property (nonatomic, assign) BOOL showDownload;
 
 /// 全屏模式
 @property (nonatomic, assign) ZFFullScreenMode fullScreenMode;

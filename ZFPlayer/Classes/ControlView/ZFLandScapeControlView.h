@@ -40,6 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 返回按钮
 @property (nonatomic, strong, readonly) UIButton *backBtn;
 
+@property (nonatomic, strong, readonly) UIButton *downloadBtn;
+
 /// 标题
 @property (nonatomic, strong, readonly) UILabel *titleLabel;
 
@@ -64,6 +66,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 横屏时候是否显示自定义状态栏(iOS13+)，默认 NO.
 @property (nonatomic, assign) BOOL showCustomStatusBar;
 
+/// 横屏时候是否显示下载按钮，默认 YES.
+@property (nonatomic, assign) BOOL showDownload;
+
 /// 播放器
 @property (nonatomic, weak) ZFPlayerController *player;
 
@@ -75,6 +80,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 返回按钮点击回调
 @property (nonatomic, copy) void(^backBtnClickCallback)(void);
+/// 返回按钮点击回调
+@property (nonatomic, copy) void(^downloadBtnClickCallback)(void);
 
 /// 如果是暂停状态，seek完是否播放，默认YES
 @property (nonatomic, assign) BOOL seekToPlay;
