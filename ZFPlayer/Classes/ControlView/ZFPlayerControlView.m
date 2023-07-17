@@ -96,8 +96,22 @@
                                                  selector:@selector(volumeChanged:)
                                                      name:@"AVSystemController_SystemVolumeDidChangeNotification"
                                                    object:nil];
+        [[AVAudioSession sharedInstance] setActive:YES error:nil];
+        [[AVAudioSession sharedInstance] addObserver:self forKeyPath:@"outputVolume" options:NSKeyValueObservingOptionNew context:nil];
+
     }
     return self;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"outputVolume"]) {
+        if (self.player.isFullScreen) {
+            CGFloat volume = [change[NSKeyValueChangeNewKey] floatValue];
+            [self.volumeBrightnessView updateProgress:volume withVolumeBrightnessType:ZFVolumeBrightnessTypeVolume];
+        } else {
+            [self.volumeBrightnessView addSystemVolumeView];
+        }
+    }
 }
 
 - (void)layoutSubviews {
@@ -166,6 +180,7 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"AVSystemController_SystemVolumeDidChangeNotification" object:nil];
+    [[AVAudioSession sharedInstance] removeObserver:self forKeyPath:@"outputVolume"];
     [self cancelAutoFadeOutControlView];
 }
 
