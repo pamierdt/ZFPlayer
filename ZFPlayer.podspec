@@ -47,5 +47,12 @@ Pod::Spec.new do |s|
         ijkplayer.dependency 'ZFPlayer/Core'
         ijkplayer.dependency 'IJKMediaFramework'
     end
+    s.subspec 'ezplayer' do |ezplayer|
+        ezplayer.source_files = 'ZFPlayer/Classes/ezplayer/*.{h,m}'
+        ezplayer.public_header_files = 'ZFPlayer/Classes/ezplayer/*.h'
+        ezplayer.dependency 'ZFPlayer/Core'
+        ezplayer.dependency 'ZFPlayer/ControlView'
+        ezplayer.dependency 'EZOpenSDK', '~> 5.5.1'
+    end
     
 end
